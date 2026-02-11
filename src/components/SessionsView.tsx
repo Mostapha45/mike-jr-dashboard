@@ -46,18 +46,18 @@ function formatTime(date: Date): string {
 
 function SessionCard({ session }: { session: Session }) {
   return (
-    <div className="bg-[var(--card-bg)] rounded-lg p-5 border border-[var(--border)] hover:border-[var(--primary)]/50 transition-all duration-200">
-      <div className="flex items-start justify-between mb-3">
+    <div className="gradient-border rounded-xl p-6 bg-[var(--card-bg)] hover:scale-[1.01] transition-all duration-300 cursor-default">
+      <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-1">
-            <span className="text-xl">💬</span>
-            <h3 className="font-semibold text-[var(--foreground)]">{session.channel}</h3>
+          <div className="flex items-center space-x-3 mb-2">
+            <span className="text-2xl">💬</span>
+            <h3 className="font-bold text-[var(--foreground)] text-xl">{session.channel}</h3>
             {session.tags && session.tags.length > 0 && (
-              <div className="flex gap-1">
+              <div className="flex gap-1.5">
                 {session.tags.slice(0, 2).map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs text-[var(--muted)] bg-[var(--border)] px-2 py-0.5 rounded"
+                    className="text-xs text-[var(--muted)] bg-[var(--card-hover)] px-3 py-1 rounded-lg font-medium"
                   >
                     #{tag}
                   </span>
@@ -65,34 +65,33 @@ function SessionCard({ session }: { session: Session }) {
               </div>
             )}
           </div>
-          <p className="text-sm text-[var(--muted)]">
+          <p className="text-sm text-[var(--muted)] font-medium">
             {formatDate(session.startTime)} • {formatTime(session.startTime)}
           </p>
         </div>
-        <span className="text-sm text-[var(--muted)]">
+        <span className="text-sm text-[var(--primary)] font-bold px-3 py-1.5 bg-[var(--card-hover)] rounded-lg">
           {formatDuration(session.duration || 0)}
         </span>
       </div>
 
       {session.summary && (
-        <p className="text-sm text-[var(--foreground)] mb-4 line-clamp-2">
+        <p className="text-sm text-[var(--foreground)] mb-5 line-clamp-2 leading-relaxed">
           {session.summary}
         </p>
       )}
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="text-center">
+        <div className="text-center p-3 rounded-lg bg-[var(--card-hover)]">
           <p className="text-2xl font-bold text-[var(--primary)]">{session.messages}</p>
-          <p className="text-xs text-[var(--muted)]">Messages</p>
+          <p className="text-xs text-[var(--muted)] font-medium">Messages</p>
         </div>
-        <div className="text-center">
+        <div className="text-center p-3 rounded-lg bg-[var(--card-hover)]">
           <p className="text-2xl font-bold text-[var(--success)]">{session.tasksCreated}</p>
-          <p className="text-xs text-[var(--muted)]">Created</p>
+          <p className="text-xs text-[var(--muted)] font-medium">Created</p>
         </div>
-        <div className="text-center">
+        <div className="text-center p-3 rounded-lg bg-[var(--card-hover)]">
           <p className="text-2xl font-bold text-[var(--secondary)]">{session.tasksCompleted}</p>
-          <p className="text-xs text-[var(--muted)]">Completed</p>
+          <p className="text-xs text-[var(--muted)] font-medium">Completed</p>
         </div>
       </div>
     </div>
@@ -103,26 +102,27 @@ export default function SessionsView({ sessions, limit, showAllLink }: SessionsV
   const displaySessions = limit ? sessions.slice(0, limit) : sessions;
 
   return (
-    <section>
+    <section className="animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Recent Sessions</h2>
+        <h2 className="text-3xl font-bold gradient-text">Sessions</h2>
         {showAllLink && (
-          <button className="text-sm text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors">
+          <button className="text-sm text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors font-medium px-4 py-2 rounded-lg hover:bg-[var(--card-hover)]">
             View All →
           </button>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
         {displaySessions.map((session) => (
           <SessionCard key={session.id} session={session} />
         ))}
       </div>
 
       {displaySessions.length === 0 && (
-        <div className="text-center py-12 text-[var(--muted)]">
-          <p className="text-lg mb-2">No sessions found</p>
-          <p className="text-sm">Sessions will appear here after you interact with Mike Jr.</p>
+        <div className="text-center py-16 text-[var(--muted)]">
+          <p className="text-2xl mb-3">💬</p>
+          <p className="text-lg font-medium mb-1">No sessions found</p>
+          <p className="text-sm">Start a conversation to track your sessions</p>
         </div>
       )}
     </section>

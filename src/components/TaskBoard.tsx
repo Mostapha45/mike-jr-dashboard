@@ -12,17 +12,17 @@ interface TaskBoardProps {
 }
 
 const statusColors = {
-  'todo': 'bg-slate-500',
-  'in-progress': 'bg-[var(--primary)]',
-  'completed': 'bg-[var(--success)]',
-  'blocked': 'bg-[var(--danger)]',
+  'todo': 'bg-gradient-to-r from-slate-500 to-slate-600',
+  'in-progress': 'bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)]',
+  'completed': 'bg-gradient-to-r from-[var(--success)] to-emerald-600',
+  'blocked': 'bg-gradient-to-r from-[var(--danger)] to-red-600',
 };
 
 const priorityColors = {
-  'low': 'text-slate-400',
-  'medium': 'text-[var(--warning)]',
-  'high': 'text-orange-500',
-  'urgent': 'text-[var(--danger)]',
+  'low': 'bg-slate-400',
+  'medium': 'bg-[var(--warning)]',
+  'high': 'bg-orange-500',
+  'urgent': 'bg-[var(--danger)]',
 };
 
 const statusLabels = {
@@ -41,16 +41,16 @@ function TaskCard({ task, onStatusChange }: { task: Task; onStatusChange: (statu
   };
 
   return (
-    <div className="bg-[var(--card-bg)] rounded-lg p-4 border border-[var(--border)] hover:border-[var(--primary)]/50 transition-all duration-200">
-      <div className="flex items-start justify-between mb-2">
+    <div className="gradient-border rounded-xl p-5 bg-[var(--card-bg)] hover:scale-[1.02] transition-all duration-300 cursor-default">
+      <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          <h3 className="font-semibold text-[var(--foreground)] mb-1">{task.title}</h3>
-          <p className="text-sm text-[var(--muted)] line-clamp-2">{task.description}</p>
+          <h3 className="font-semibold text-[var(--foreground)] mb-2 text-lg">{task.title}</h3>
+          <p className="text-sm text-[var(--muted)] line-clamp-2 leading-relaxed">{task.description}</p>
         </div>
         <select
           value={task.status}
           onChange={(e) => onStatusChange(e.target.value as Task['status'])}
-          className={`ml-3 text-xs px-2 py-1 rounded-full border-0 cursor-pointer focus:ring-2 focus:ring-[var(--primary)] ${statusColors[task.status]} text-white`}
+          className={`ml-3 text-xs px-3 py-1.5 rounded-full border-0 cursor-pointer focus:ring-2 focus:ring-[var(--primary)] ${statusColors[task.status]} text-white font-medium shadow-lg`}
         >
           <option value="todo">To Do</option>
           <option value="in-progress">In Progress</option>
@@ -59,10 +59,10 @@ function TaskCard({ task, onStatusChange }: { task: Task; onStatusChange: (statu
         </select>
       </div>
 
-      <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center justify-between mt-5">
         <div className="flex items-center space-x-3">
           {task.project && (
-            <span className="text-xs text-[var(--muted)] bg-[var(--border)] px-2 py-1 rounded">
+            <span className="text-xs text-[var(--foreground)] bg-[var(--border)] px-3 py-1.5 rounded-lg font-medium">
               {task.project}
             </span>
           )}
@@ -72,23 +72,23 @@ function TaskCard({ task, onStatusChange }: { task: Task; onStatusChange: (statu
             </span>
           )}
         </div>
-        <span className={`text-xs font-medium ${priorityColors[task.priority]}`}>
+        <span className={`text-xs font-bold px-3 py-1.5 rounded-full text-white ${priorityColors[task.priority]} shadow-md`}>
           {task.priority.toUpperCase()}
         </span>
       </div>
 
       {task.tags && task.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1 mt-3">
+        <div className="flex flex-wrap gap-2 mt-4">
           {task.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="text-xs text-[var(--muted)] bg-[var(--border)] px-2 py-0.5 rounded"
+              className="text-xs text-[var(--muted)] bg-[var(--card-hover)] px-3 py-1 rounded-lg font-medium"
             >
               #{tag}
             </span>
           ))}
           {task.tags.length > 3 && (
-            <span className="text-xs text-[var(--muted)]">+{task.tags.length - 3}</span>
+            <span className="text-xs text-[var(--primary)] font-medium">+{task.tags.length - 3}</span>
           )}
         </div>
       )}
@@ -102,7 +102,6 @@ export default function TaskBoard({ tasks, onTaskUpdate, title, limit, showAllLi
   const filteredTasks = tasks
     .filter(task => filter === 'all' || task.status === filter)
     .sort((a, b) => {
-      // Sort by priority first, then by date
       const priorityOrder = { 'urgent': 0, 'high': 1, 'medium': 2, 'low': 3 };
       if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
         return priorityOrder[a.priority] - priorityOrder[b.priority];
@@ -123,25 +122,24 @@ export default function TaskBoard({ tasks, onTaskUpdate, title, limit, showAllLi
   };
 
   return (
-    <section>
+    <section className="animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">{title}</h2>
+        <h2 className="text-3xl font-bold gradient-text">{title}</h2>
         {showAllLink && (
-          <button className="text-sm text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors">
+          <button className="text-sm text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors font-medium px-4 py-2 rounded-lg hover:bg-[var(--card-hover)]">
             View All →
           </button>
         )}
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex space-x-1 mb-6 overflow-x-auto pb-2">
+      <div className="flex space-x-2 mb-6 overflow-x-auto pb-2">
         {(['all', 'todo', 'in-progress', 'completed', 'blocked'] as const).map((status) => (
           <button
             key={status}
             onClick={() => setFilter(status)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-200 ${
               filter === status
-                ? 'bg-[var(--primary)] text-white'
+                ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white shadow-lg shadow-[var(--primary)]/25'
                 : 'text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--card-hover)]'
             }`}
           >
@@ -150,8 +148,7 @@ export default function TaskBoard({ tasks, onTaskUpdate, title, limit, showAllLi
         ))}
       </div>
 
-      {/* Task Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredTasks.map((task) => (
           <TaskCard
             key={task.id}
@@ -162,8 +159,9 @@ export default function TaskBoard({ tasks, onTaskUpdate, title, limit, showAllLi
       </div>
 
       {filteredTasks.length === 0 && (
-        <div className="text-center py-12 text-[var(--muted)]">
-          <p className="text-lg mb-2">No tasks found</p>
+        <div className="text-center py-16 text-[var(--muted)]">
+          <p className="text-2xl mb-3">📭</p>
+          <p className="text-lg font-medium mb-1">No tasks found</p>
           <p className="text-sm">Try adjusting your filters</p>
         </div>
       )}

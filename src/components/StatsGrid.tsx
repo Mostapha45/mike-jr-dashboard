@@ -13,22 +13,22 @@ interface StatCardProps {
   color: 'primary' | 'success' | 'warning' | 'secondary';
 }
 
-const colors = {
-  primary: 'bg-[var(--primary)]',
-  success: 'bg-[var(--success)]',
-  warning: 'bg-[var(--warning)]',
-  secondary: 'bg-[var(--secondary)]',
+const colorGradients = {
+  primary: 'from-[var(--primary)] to-[var(--primary-dark)]',
+  success: 'from-[var(--success)] to-emerald-600',
+  warning: 'from-[var(--warning)] to-amber-600',
+  secondary: 'from-[var(--secondary)] to-cyan-600',
 };
 
 function StatCard({ label, value, icon, color }: StatCardProps) {
   return (
-    <div className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--border)] hover:border-[var(--primary)]/50 transition-all duration-200">
+    <div className="gradient-border rounded-xl p-6 bg-[var(--card-bg)] hover:scale-105 transition-all duration-300 cursor-default">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-[var(--muted)] mb-1">{label}</p>
-          <p className="text-3xl font-bold">{value}</p>
+          <p className="text-sm text-[var(--muted)] mb-2 font-medium">{label}</p>
+          <p className="text-4xl font-bold gradient-text">{value}</p>
         </div>
-        <div className={`w-12 h-12 rounded-lg ${colors[color]} flex items-center justify-center text-white text-xl`}>
+        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${colorGradients[color]} flex items-center justify-center text-white text-2xl shadow-lg shadow-[var(--primary)]/20`}>
           {icon}
         </div>
       </div>
@@ -45,8 +45,8 @@ export default function StatsGrid({ stats }: StatsGridProps) {
   ];
 
   return (
-    <section>
-      <h2 className="text-2xl font-bold mb-6">Overview</h2>
+    <section className="animate-fade-in">
+      <h2 className="text-3xl font-bold mb-6 gradient-text">Overview</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((card, index) => (
           <StatCard
