@@ -74,3 +74,5 @@ export interface Activity {
   timestamp: Date;
   details?: Record<string, any>;
 }
+
+export type View = 'dashboard' | 'tasks' | 'projects' | 'sessions' | 'capabilities' | 'skills';

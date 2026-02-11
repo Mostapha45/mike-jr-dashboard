@@ -10,9 +10,7 @@ import SessionsView from '@/components/SessionsView';
 import CapabilitiesView from '@/components/CapabilitiesView';
 import SkillsView from '@/components/SkillsView';
 import ActivityFeed from '@/components/ActivityFeed';
-import type { Task } from '@/types';
-
-type View = 'dashboard' | 'tasks' | 'projects' | 'sessions' | 'capabilities' | 'skills';
+import type { Task, View } from '@/types';
 
 export default function Dashboard() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
